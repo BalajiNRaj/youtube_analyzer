@@ -11,6 +11,7 @@ from src.youtube_api.client import YouTubeClient
 from src.youtube_api.comments import CommentsExtractor
 from src.analytics.sentiment import SentimentAnalyzer
 from src.analytics.insights import InsightGenerator
+from src.ai_processing import CommentProcessor, ProcessedComment
 from src.utils.helpers import (
     VideoIDExtractor, DataExporter, Logger, RateLimiter, 
     ConfigManager, format_number
@@ -48,6 +49,9 @@ class YouTubeAnalyzer:
         self.comments_extractor = None
         self.sentiment_analyzer = SentimentAnalyzer()
         self.insights_generator = InsightGenerator()
+        
+        # AI comment processor
+        self.comment_processor = CommentProcessor()
         
         # Rate limiter
         rate_limit_config = self.config.get('api', {}).get('rate_limit', {})
@@ -108,42 +112,58 @@ class YouTubeAnalyzer:
                 raise Exception("Authentication failed")
         
         try:
-            # Extract comments with rate limiting
+            # Extract comments with rate limiting and AI preprocessing
             self.logger.info(f"Extracting up to {max_comments} comments...")
-            comments = self._extract_comments_with_rate_limit(video_id, max_comments)
+            processed_comments = self._extract_comments_with_rate_limit(video_id, max_comments)
             
-            if not comments:
+            if not processed_comments:
                 self.logger.warning("No comments found for analysis")
                 return {"error": "No comments found"}
             
-            self.logger.info(f"Extracted {len(comments)} comments")
+            self.logger.info(f"Extracted and processed {len(processed_comments)} AI-ready comments")
             
-            # Perform sentiment analysis
-            # self.logger.info("Performing sentiment analysis...")
-            analyzed_comments = comments # self.sentiment_analyzer.analyze_comments_batch(comments)
+            # Create AI-ready export format
+            ai_ready_data = self.comment_processor.create_ai_ready_export(processed_comments)
             
-            # Generate insights
-            # self.logger.info("Generating insights...")
-            # insights = self.insights_generator.generate_comprehensive_insights(analyzed_comments)
-            
-            # Prepare results
+            # Prepare results with AI-ready structure
             results = {
-              'video_id': video_id,
-              'analysis_timestamp': datetime.now().isoformat(),
-              'total_comments_analyzed': len(analyzed_comments),
-              'comments': analyzed_comments,
-              # 'insights': insights
+                'video_id': video_id,
+                'analysis_timestamp': datetime.now().isoformat(),
+                'total_comments_analyzed': len(processed_comments),
+                'ai_ready_data': ai_ready_data,
+                'processed_comments': processed_comments  # Keep for backward compatibility
             }
             
             # Export results
             if export_format:
                 filename = f"youtube_analysis_{video_id}_{datetime.now().strftime('%Y%m%d_%H%M%S')}"
                 if export_format.lower() == 'json':
-                    export_path = DataExporter.to_json(results, filename)
+                    # Export AI-ready format
+                    export_path = DataExporter.to_json(ai_ready_data, f"{filename}_ai_ready")
+                    self.logger.info(f"AI-ready data exported to: {export_path}")
                 elif export_format.lower() == 'csv':
-                    export_path = DataExporter.to_csv(analyzed_comments, filename)
+                    # Convert ProcessedComments to dict format for CSV
+                    csv_data = [
+                        {
+                            'id': c.id,
+                            'text': c.text,
+                            'cleaned_text': c.cleaned_text,
+                            'embedding_text': c.embedding_ready,
+                            'author': c.author,
+                            'likes': c.likes,
+                            'replies_count': c.replies_count,
+                            'timestamp': c.timestamp,
+                            'video_id': c.video_id,
+                            'word_count': c.metadata.get('word_count', 0),
+                            'engagement_score': c.metadata.get('engagement_score', 0),
+                            'is_question': c.metadata.get('is_question', False),
+                            'has_mentions': c.metadata.get('has_mentions', False),
+                            'has_hashtags': c.metadata.get('has_hashtags', False)
+                        } for c in processed_comments
+                    ]
+                    export_path = DataExporter.to_csv(csv_data, filename)
                 else:
-                    export_path = DataExporter.to_json(results, filename)
+                    export_path = DataExporter.to_json(ai_ready_data, f"{filename}_ai_ready")
                 
                 self.logger.info(f"Results exported to: {export_path}")
                 results['export_path'] = export_path
@@ -186,7 +206,9 @@ class YouTubeAnalyzer:
                 
                 video_id = result.get('video_id')
                 all_results[video_id] = result
-                all_comments.extend(result.get('comments', []))
+                # Extract ProcessedComment objects from the result
+                processed_comments = result.get('processed_comments', [])
+                all_comments.extend(processed_comments)
                 
             except Exception as e:
                 self.logger.error(f"Failed to analyze video {video_url}: {str(e)}")
@@ -194,8 +216,8 @@ class YouTubeAnalyzer:
         
         # Generate combined insights
         if all_comments:
-            self.logger.info("Generating combined insights...")
-            combined_insights = self.insights_generator.generate_comprehensive_insights(all_comments)
+            self.logger.info("Generating combined AI-ready dataset...")
+            combined_ai_data = self.comment_processor.create_ai_ready_export(all_comments)
             
             # Export combined results
             combined_results = {
@@ -203,7 +225,7 @@ class YouTubeAnalyzer:
                 'total_videos_analyzed': len(all_results),
                 'total_comments_analyzed': len(all_comments),
                 'individual_results': all_results,
-                'combined_insights': combined_insights
+                'combined_ai_data': combined_ai_data
             }
             
             filename = f"youtube_batch_analysis_{datetime.now().strftime('%Y%m%d_%H%M%S')}"
@@ -221,12 +243,14 @@ class YouTubeAnalyzer:
         self, 
         video_id: str, 
         max_comments: int
-    ) -> List[Dict[str, Any]]:
-        """Extract comments with rate limiting."""
-        comments = []
+    ) -> List[ProcessedComment]:
+        """Extract comments with rate limiting and AI preprocessing."""
+        processed_comments = []
         batch_size = min(100, max_comments)  # API maximum
         
         try:
+            self.logger.info(f"Extracting and processing comments for AI ingestion...")
+            
             for batch in self.comments_extractor.stream_comments(video_id, batch_size):
                 # Check rate limit
                 if not self.rate_limiter.can_make_request():
@@ -235,18 +259,28 @@ class YouTubeAnalyzer:
                     time.sleep(wait_time)
                 
                 self.rate_limiter.make_request()
-                comments.extend(batch)
                 
-                self.logger.info(f"Extracted {len(comments)} comments so far...")
+                self.logger.info(f"Retrieved {len(batch)} comments so far...")
+                # Process each comment in the batch for AI
+                for raw_comment in batch:
+                    processed_comment = self.comment_processor.process_comment_data(raw_comment, video_id)
+                    if processed_comment:  # Only add valid processed comments
+                        processed_comments.append(processed_comment)
                 
-                if len(comments) >= max_comments:
+                self.logger.info(f"Processed {len(processed_comments)} AI-ready comments so far...")
+                
+                if len(processed_comments) >= max_comments:
                     break
             
-            return comments[:max_comments]
+            # Trim to exact requested amount
+            final_comments = processed_comments[:max_comments]
+            self.logger.info(f"✅ Successfully processed {len(final_comments)} comments for AI analysis")
+            
+            return final_comments
             
         except Exception as e:
             self.logger.error(f"Error extracting comments: {str(e)}")
-            return comments  # Return what we have so far
+            return processed_comments  # Return what we have so far
     
     def _get_default_config(self) -> Dict[str, Any]:
         """Get default configuration if config file not found."""
@@ -328,36 +362,42 @@ class YouTubeAnalyzer:
             print(f"❌ Error: {results['error']}")
             return
         
-        insights = results.get('insights', {})
-        overview = insights.get('overview', {})
-        sentiment = insights.get('sentiment_insights', {})
+        ai_data = results.get('ai_ready_data', {})
+        summary = ai_data.get('dataset_summary', {})
         
         print("\n" + "="*60)
-        print("📊 YOUTUBE COMMENTS ANALYSIS SUMMARY")
+        print("📊 YOUTUBE COMMENTS AI-READY ANALYSIS SUMMARY")
         print("="*60)
         
         print(f"🎥 Video ID: {results.get('video_id', 'N/A')}")
         print(f"📅 Analysis Date: {results.get('analysis_timestamp', 'N/A')}")
-        print(f"💬 Comments Analyzed: {format_number(results.get('total_comments_analyzed', 0))}")
+        print(f"💬 Comments Processed: {format_number(results.get('total_comments_analyzed', 0))}")
         
-        if overview:
-            print(f"\n📈 ENGAGEMENT METRICS:")
-            print(f"   • Total Likes: {format_number(overview.get('total_likes', 0))}")
-            print(f"   • Avg Likes/Comment: {overview.get('average_likes_per_comment', 0)}")
-            print(f"   • Avg Word Count: {overview.get('average_word_count', 0)}")
-        
-        if sentiment:
-            overall_sentiment = sentiment.get('overall_sentiment', {})
-            distribution = overall_sentiment.get('distribution', {})
+        if summary:
+            print(f"\n📈 AI PROCESSING METRICS:")
+            print(f"   • Total Words: {format_number(summary.get('total_words', 0))}")
+            print(f"   • Avg Words/Comment: {summary.get('average_words_per_comment', 0):.1f}")
+            print(f"   • Avg Engagement Score: {summary.get('average_engagement_score', 0):.1f}")
             
-            print(f"\n🎭 SENTIMENT ANALYSIS:")
-            print(f"   • Positive: {distribution.get('positive', 0)} ({distribution.get('positive', 0)/sum(distribution.values())*100:.1f}%)")
-            print(f"   • Neutral: {distribution.get('neutral', 0)} ({distribution.get('neutral', 0)/sum(distribution.values())*100:.1f}%)")
-            print(f"   • Negative: {distribution.get('negative', 0)} ({distribution.get('negative', 0)/sum(distribution.values())*100:.1f}%)")
-            print(f"   • Dominant: {overall_sentiment.get('dominant_sentiment', 'N/A').title()}")
+            content_dist = summary.get('content_distribution', {})
+            if content_dist:
+                print(f"\n� CONTENT ANALYSIS:")
+                print(f"   • Questions: {content_dist.get('questions', 0)}")
+                print(f"   • Mentions: {content_dist.get('mentions', 0)}")
+                print(f"   • Hashtags: {content_dist.get('hashtags', 0)}")
+                print(f"   • With Emojis: {content_dist.get('emojis', 0)}")
+                print(f"   • Long Comments (>20 words): {content_dist.get('long_comments', 0)}")
+            
+            top_authors = summary.get('top_authors', [])
+            if top_authors:
+                print(f"\n👥 TOP ACTIVE AUTHORS:")
+                for author, count in top_authors[:5]:
+                    print(f"   • {author}: {count} comments")
+        
+        print(f"\n🤖 AI STATUS: Ready for semantic search and natural language queries")
         
         if 'export_path' in results:
-            print(f"\n💾 Results saved to: {results['export_path']}")
+            print(f"💾 AI-ready data saved to: {results['export_path']}")
         
         print("="*60 + "\n")
 
