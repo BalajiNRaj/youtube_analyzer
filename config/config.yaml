@@ -1,0 +1,79 @@
+# YouTube Analytics Configuration
+
+# API Configuration
+api:
+  # YouTube Data API v3 settings
+  quota_limit: 10000  # Daily quota limit
+  requests_per_minute: 60
+  max_results_per_request: 100
+  
+  # Rate limiting
+  rate_limit:
+    max_requests: 100
+    time_window: 3600  # 1 hour in seconds
+
+# Analysis Settings
+analysis:
+  # Sentiment analysis
+  sentiment:
+    confidence_threshold: 0.1
+    enable_emotion_analysis: true
+    custom_indicators: true
+  
+  # Content analysis
+  content:
+    min_word_length: 3
+    max_common_words: 50
+    enable_topic_extraction: true
+  
+  # Engagement metrics
+  engagement:
+    high_engagement_percentile: 75
+    min_likes_threshold: 5
+    min_replies_threshold: 2
+
+# Data Processing
+processing:
+  # Text cleaning
+  text_cleaning:
+    remove_urls: true
+    remove_mentions: false
+    remove_hashtags: false
+    normalize_whitespace: true
+  
+  # Export settings
+  export:
+    default_format: json
+    include_raw_data: true
+    timestamp_format: "%Y-%m-%d %H:%M:%S"
+
+# Output Configuration
+output:
+  # File paths
+  data_directory: "data"
+  exports_directory: "data/exports"
+  logs_directory: "logs"
+  
+  # Visualization
+  charts:
+    enable_wordcloud: true
+    enable_sentiment_charts: true
+    chart_style: "seaborn"
+    figure_size: [12, 8]
+
+# Security
+security:
+  # API key handling
+  api_key_env_var: "YOUTUBE_API_KEY"
+  credentials_file: "config/credentials.json"
+  
+  # Data privacy
+  anonymize_authors: false  # Set to true to anonymize author names
+  exclude_personal_data: false
+
+# Logging
+logging:
+  level: "INFO"  # DEBUG, INFO, WARNING, ERROR, CRITICAL
+  file: "youtube_analyzer.log"
+  max_file_size: "10MB"
+  backup_count: 5

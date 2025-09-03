@@ -1,0 +1,18 @@
+2025-09-03 21:58:56,018 - youtube_analyzer_aLGlHDZpLFU - INFO - YouTube Analyzer initialized
+2025-09-03 21:58:56,019 - youtube_analyzer_aLGlHDZpLFU - INFO - Starting analysis for video: aLGlHDZpLFU
+2025-09-03 21:58:56,019 - youtube_analyzer_aLGlHDZpLFU - INFO - Attempting to authenticate with YouTube API
+2025-09-03 21:58:56,021 - youtube_analyzer_aLGlHDZpLFU - INFO - Successfully authenticated with YouTube API
+2025-09-03 21:58:56,021 - youtube_analyzer_aLGlHDZpLFU - INFO - Extracting up to 100 comments...
+2025-09-03 21:58:58,475 - youtube_analyzer_aLGlHDZpLFU - INFO - Extracted 66 comments so far...
+2025-09-03 21:58:58,475 - youtube_analyzer_aLGlHDZpLFU - INFO - Extracted 66 comments
+2025-09-03 21:58:58,476 - youtube_analyzer_aLGlHDZpLFU - INFO - Results exported to: data/exports/youtube_analysis_aLGlHDZpLFU_20250903_215858.json
+2025-09-03 21:58:58,476 - youtube_analyzer_aLGlHDZpLFU - INFO - Analysis completed successfully
+2025-09-03 22:00:15,374 - youtube_analyzer_aLGlHDZpLFU - INFO - YouTube Analyzer initialized
+2025-09-03 22:00:15,374 - youtube_analyzer_aLGlHDZpLFU - INFO - Starting analysis for video: aLGlHDZpLFU
+2025-09-03 22:00:15,374 - youtube_analyzer_aLGlHDZpLFU - INFO - Attempting to authenticate with YouTube API
+2025-09-03 22:00:15,376 - youtube_analyzer_aLGlHDZpLFU - INFO - Successfully authenticated with YouTube API
+2025-09-03 22:00:15,376 - youtube_analyzer_aLGlHDZpLFU - INFO - Extracting up to 100 comments...
+2025-09-03 22:00:15,874 - youtube_analyzer_aLGlHDZpLFU - INFO - Extracted 69 comments so far...
+2025-09-03 22:00:15,875 - youtube_analyzer_aLGlHDZpLFU - INFO - Extracted 69 comments
+2025-09-03 22:00:15,878 - youtube_analyzer_aLGlHDZpLFU - INFO - Results exported to: data/exports/youtube_analysis_aLGlHDZpLFU_20250903_220015.json
+2025-09-03 22:00:15,878 - youtube_analyzer_aLGlHDZpLFU - INFO - Analysis completed successfully
