@@ -34,20 +34,22 @@ class CommentsExtractor:
         
         Args:
             video_id: YouTube video ID
-            max_results: Maximum number of comments to retrieve (1-100)
+            max_results: Maximum number of comments to retrieve
             text_format: Format of comment text ('plainText' or 'html')
             order: Order of comments ('time', 'relevance')
             
         Returns:
-            List of comment dictionaries
+            List of comment dictionaries (includes both comments and replies)
         """
         comments = []
         next_page_token = None
+        seen_comment_ids = set()  # Track seen comment IDs to prevent duplicates
+        comment_threads_processed = 0
         
         try:
-            while len(comments) < max_results:
-                # Calculate remaining comments needed
-                remaining = max_results - len(comments)
+            while comment_threads_processed < max_results:
+                # Calculate remaining comment threads needed
+                remaining = max_results - comment_threads_processed
                 page_size = min(remaining, 100)  # API max per request
                 
                 # Get comment threads (top-level comments)
@@ -62,15 +64,27 @@ class CommentsExtractor:
                 
                 response = request.execute()
                 
+                if not response.get('items'):
+                    break
+                
                 # Process comment threads
                 for item in response.get('items', []):
                     comment_data = self._extract_comment_data(item)
-                    comments.append(comment_data)
+                    
+                    # Add main comment if not already seen
+                    if comment_data['id'] not in seen_comment_ids:
+                        comments.append(comment_data)
+                        seen_comment_ids.add(comment_data['id'])
                     
                     # Add replies if they exist
                     if 'replies' in item:
                         replies = self._extract_replies(item['replies'])
-                        comments.extend(replies)
+                        for reply in replies:
+                            if reply['id'] not in seen_comment_ids:
+                                comments.append(reply)
+                                seen_comment_ids.add(reply['id'])
+                    
+                    comment_threads_processed += 1
                 
                 # Check for next page
                 next_page_token = response.get('nextPageToken')
@@ -80,7 +94,7 @@ class CommentsExtractor:
         except HttpError as e:
             print(f"Error fetching comments for video {video_id}: {e}")
             
-        return comments[:max_results]
+        return comments
     
     def get_comments_by_ids(
         self, 
@@ -252,29 +266,37 @@ class CommentsExtractor:
         self, 
         video_id: str, 
         batch_size: int = 50,
-        text_format: str = 'plainText'
+        text_format: str = 'plainText',
+        max_batches: Optional[int] = None
     ) -> Generator[List[Dict[str, Any]], None, None]:
         """
         Stream comments in batches to handle large datasets efficiently.
         
         Args:
             video_id: YouTube video ID
-            batch_size: Number of comments per batch
+            batch_size: Number of comment threads per batch
             text_format: Format of comment text ('plainText' or 'html')
+            max_batches: Maximum number of batches to yield (None for unlimited)
             
         Yields:
-            Batches of comment dictionaries
+            Batches of comment dictionaries (includes both comments and replies)
         """
         next_page_token = None
+        seen_comment_ids = set()  # Track seen comment IDs across all batches
+        batches_yielded = 0
         
         try:
             while True:
+                if max_batches and batches_yielded >= max_batches:
+                    break
+                    
                 request = self.service.commentThreads().list(
                     part='snippet,replies',
                     videoId=video_id,
                     maxResults=batch_size,
                     textFormat=text_format,
-                    pageToken=next_page_token
+                    pageToken=next_page_token,
+                    order='time'
                 )
                 
                 response = request.execute()
@@ -285,13 +307,24 @@ class CommentsExtractor:
                 batch_comments = []
                 for item in response['items']:
                     comment_data = self._extract_comment_data(item)
-                    batch_comments.append(comment_data)
                     
+                    # Add main comment if not already seen
+                    if comment_data['id'] not in seen_comment_ids:
+                        batch_comments.append(comment_data)
+                        seen_comment_ids.add(comment_data['id'])
+                    
+                    # Add replies if they exist
                     if 'replies' in item:
                         replies = self._extract_replies(item['replies'])
-                        batch_comments.extend(replies)
+                        for reply in replies:
+                            if reply['id'] not in seen_comment_ids:
+                                batch_comments.append(reply)
+                                seen_comment_ids.add(reply['id'])
                 
-                yield batch_comments
+                # Only yield if we have new comments
+                if batch_comments:
+                    yield batch_comments
+                    batches_yielded += 1
                 
                 next_page_token = response.get('nextPageToken')
                 if not next_page_token:
@@ -300,3 +333,54 @@ class CommentsExtractor:
         except HttpError as e:
             print(f"Error streaming comments for video {video_id}: {e}")
             return
+
+    def get_all_comments(
+        self, 
+        video_id: str, 
+        max_comments: Optional[int] = None,
+        text_format: str = 'plainText',
+        order: str = 'time'
+    ) -> List[Dict[str, Any]]:
+        """
+        Get all comments for a video without duplicates.
+        
+        Args:
+            video_id: YouTube video ID
+            max_comments: Maximum number of comments to retrieve (None for all)
+            text_format: Format of comment text ('plainText' or 'html')
+            order: Order of comments ('time', 'relevance')
+            
+        Returns:
+            List of all comment dictionaries without duplicates
+        """
+        all_comments = []
+        seen_comment_ids = set()
+        batch_count = 0
+        
+        try:
+            for batch in self.stream_comments(video_id, batch_size=100, text_format=text_format):
+                batch_count += 1
+                
+                # Add comments from this batch
+                for comment in batch:
+                    if comment['id'] not in seen_comment_ids:
+                        all_comments.append(comment)
+                        seen_comment_ids.add(comment['id'])
+                
+                # Check if we've reached the maximum
+                if max_comments and len(all_comments) >= max_comments:
+                    break
+                    
+                # Log progress for large extractions
+                if batch_count % 10 == 0:
+                    print(f"Processed {batch_count} batches, {len(all_comments)} unique comments")
+                    
+        except Exception as e:
+            print(f"Error getting all comments for video {video_id}: {e}")
+            
+        # Trim to max_comments if specified
+        if max_comments:
+            all_comments = all_comments[:max_comments]
+            
+        print(f"Successfully extracted {len(all_comments)} unique comments")
+        return all_comments

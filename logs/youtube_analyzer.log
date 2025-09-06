@@ -1,86 +1,182 @@
-2025-09-03 23:23:22,364 - youtube_analyzer_t865KSKdSDk - INFO - YouTube Analyzer initialized
-2025-09-03 23:23:22,364 - youtube_analyzer_t865KSKdSDk - INFO - Starting analysis for video: t865KSKdSDk
-2025-09-03 23:23:22,364 - youtube_analyzer_t865KSKdSDk - INFO - Attempting to authenticate with YouTube API
-2025-09-03 23:23:22,367 - youtube_analyzer_t865KSKdSDk - INFO - Successfully authenticated with YouTube API
-2025-09-03 23:23:22,367 - youtube_analyzer_t865KSKdSDk - INFO - Extracting up to 100 comments...
-2025-09-03 23:23:22,367 - youtube_analyzer_t865KSKdSDk - INFO - Extracting and processing comments for AI ingestion...
-2025-09-03 23:23:22,607 - youtube_analyzer_t865KSKdSDk - INFO - Retrieved 43 comments so far...
-2025-09-03 23:23:22,609 - youtube_analyzer_t865KSKdSDk - INFO - Processed 43 AI-ready comments so far...
-2025-09-03 23:23:22,609 - youtube_analyzer_t865KSKdSDk - INFO - ✅ Successfully processed 43 comments for AI analysis
-2025-09-03 23:23:22,609 - youtube_analyzer_t865KSKdSDk - INFO - Extracted and processed 43 AI-ready comments
-2025-09-03 23:23:22,611 - youtube_analyzer_t865KSKdSDk - INFO - AI-ready data exported to: data/exports/youtube_analysis_t865KSKdSDk_20250903_232322_ai_ready.json
-2025-09-03 23:23:22,611 - youtube_analyzer_t865KSKdSDk - INFO - Results exported to: data/exports/youtube_analysis_t865KSKdSDk_20250903_232322_ai_ready.json
-2025-09-03 23:23:22,611 - youtube_analyzer_t865KSKdSDk - INFO - Analysis completed successfully
-2025-09-03 23:27:12,447 - youtube_analyzer_OzHvOB137k0 - INFO - YouTube Analyzer initialized
-2025-09-03 23:27:12,447 - youtube_analyzer_OzHvOB137k0 - INFO - Starting analysis for video: OzHvOB137k0
-2025-09-03 23:27:12,447 - youtube_analyzer_OzHvOB137k0 - INFO - Attempting to authenticate with YouTube API
-2025-09-03 23:27:12,449 - youtube_analyzer_OzHvOB137k0 - INFO - Successfully authenticated with YouTube API
-2025-09-03 23:27:12,449 - youtube_analyzer_OzHvOB137k0 - INFO - Extracting up to 100 comments...
-2025-09-03 23:27:12,450 - youtube_analyzer_OzHvOB137k0 - INFO - Extracting and processing comments for AI ingestion...
-2025-09-03 23:27:12,962 - youtube_analyzer_OzHvOB137k0 - INFO - Retrieved 100 comments so far...
-2025-09-03 23:27:12,967 - youtube_analyzer_OzHvOB137k0 - INFO - Processed 97 AI-ready comments so far...
-2025-09-03 23:27:13,525 - youtube_analyzer_OzHvOB137k0 - INFO - Retrieved 101 comments so far...
-2025-09-03 23:27:13,528 - youtube_analyzer_OzHvOB137k0 - INFO - Processed 196 AI-ready comments so far...
-2025-09-03 23:27:13,528 - youtube_analyzer_OzHvOB137k0 - INFO - ✅ Successfully processed 100 comments for AI analysis
-2025-09-03 23:27:13,528 - youtube_analyzer_OzHvOB137k0 - INFO - Extracted and processed 100 AI-ready comments
-2025-09-03 23:27:13,536 - youtube_analyzer_OzHvOB137k0 - INFO - AI-ready data exported to: data/exports/youtube_analysis_OzHvOB137k0_20250903_232713_ai_ready.json
-2025-09-03 23:27:13,536 - youtube_analyzer_OzHvOB137k0 - INFO - Results exported to: data/exports/youtube_analysis_OzHvOB137k0_20250903_232713_ai_ready.json
-2025-09-03 23:27:13,537 - youtube_analyzer_OzHvOB137k0 - INFO - Analysis completed successfully
-2025-09-03 23:28:23,275 - youtube_analyzer_t865KSKdSDk - INFO - YouTube Analyzer initialized
-2025-09-03 23:28:23,276 - youtube_analyzer_t865KSKdSDk - INFO - Starting analysis for video: t865KSKdSDk
-2025-09-03 23:28:23,276 - youtube_analyzer_t865KSKdSDk - INFO - Attempting to authenticate with YouTube API
-2025-09-03 23:28:23,278 - youtube_analyzer_t865KSKdSDk - INFO - Successfully authenticated with YouTube API
-2025-09-03 23:28:23,278 - youtube_analyzer_t865KSKdSDk - INFO - Extracting up to 200 comments...
-2025-09-03 23:28:23,278 - youtube_analyzer_t865KSKdSDk - INFO - Extracting and processing comments for AI ingestion...
-2025-09-03 23:28:23,491 - youtube_analyzer_t865KSKdSDk - INFO - Retrieved 43 comments so far...
-2025-09-03 23:28:23,492 - youtube_analyzer_t865KSKdSDk - INFO - Processed 43 AI-ready comments so far...
-2025-09-03 23:28:23,492 - youtube_analyzer_t865KSKdSDk - INFO - ✅ Successfully processed 43 comments for AI analysis
-2025-09-03 23:28:23,492 - youtube_analyzer_t865KSKdSDk - INFO - Extracted and processed 43 AI-ready comments
-2025-09-03 23:28:23,494 - youtube_analyzer_t865KSKdSDk - INFO - AI-ready data exported to: data/exports/youtube_analysis_t865KSKdSDk_20250903_232823_ai_ready.json
-2025-09-03 23:28:23,494 - youtube_analyzer_t865KSKdSDk - INFO - Results exported to: data/exports/youtube_analysis_t865KSKdSDk_20250903_232823_ai_ready.json
-2025-09-03 23:28:23,494 - youtube_analyzer_t865KSKdSDk - INFO - Analysis completed successfully
-2025-09-03 23:28:33,744 - youtube_analyzer_OzHvOB137k0 - INFO - YouTube Analyzer initialized
-2025-09-03 23:28:33,744 - youtube_analyzer_OzHvOB137k0 - INFO - Starting analysis for video: OzHvOB137k0
-2025-09-03 23:28:33,744 - youtube_analyzer_OzHvOB137k0 - INFO - Attempting to authenticate with YouTube API
-2025-09-03 23:28:33,747 - youtube_analyzer_OzHvOB137k0 - INFO - Successfully authenticated with YouTube API
-2025-09-03 23:28:33,747 - youtube_analyzer_OzHvOB137k0 - INFO - Extracting up to 2000 comments...
-2025-09-03 23:28:33,747 - youtube_analyzer_OzHvOB137k0 - INFO - Extracting and processing comments for AI ingestion...
-2025-09-03 23:28:34,228 - youtube_analyzer_OzHvOB137k0 - INFO - Retrieved 100 comments so far...
-2025-09-03 23:28:34,231 - youtube_analyzer_OzHvOB137k0 - INFO - Processed 97 AI-ready comments so far...
-2025-09-03 23:28:34,447 - youtube_analyzer_OzHvOB137k0 - INFO - Retrieved 101 comments so far...
-2025-09-03 23:28:34,450 - youtube_analyzer_OzHvOB137k0 - INFO - Processed 196 AI-ready comments so far...
-2025-09-03 23:28:34,933 - youtube_analyzer_OzHvOB137k0 - INFO - Retrieved 102 comments so far...
-2025-09-03 23:28:34,937 - youtube_analyzer_OzHvOB137k0 - INFO - Processed 294 AI-ready comments so far...
-2025-09-03 23:28:35,397 - youtube_analyzer_OzHvOB137k0 - INFO - Retrieved 106 comments so far...
-2025-09-03 23:28:35,401 - youtube_analyzer_OzHvOB137k0 - INFO - Processed 397 AI-ready comments so far...
-2025-09-03 23:28:35,802 - youtube_analyzer_OzHvOB137k0 - INFO - Retrieved 103 comments so far...
-2025-09-03 23:28:35,803 - youtube_analyzer_OzHvOB137k0 - INFO - Processed 498 AI-ready comments so far...
-2025-09-03 23:28:36,128 - youtube_analyzer_OzHvOB137k0 - INFO - Retrieved 101 comments so far...
-2025-09-03 23:28:36,131 - youtube_analyzer_OzHvOB137k0 - INFO - Processed 597 AI-ready comments so far...
-2025-09-03 23:28:36,531 - youtube_analyzer_OzHvOB137k0 - INFO - Retrieved 102 comments so far...
-2025-09-03 23:28:36,534 - youtube_analyzer_OzHvOB137k0 - INFO - Processed 697 AI-ready comments so far...
-2025-09-03 23:28:36,894 - youtube_analyzer_OzHvOB137k0 - INFO - Retrieved 109 comments so far...
-2025-09-03 23:28:36,897 - youtube_analyzer_OzHvOB137k0 - INFO - Processed 803 AI-ready comments so far...
-2025-09-03 23:28:37,186 - youtube_analyzer_OzHvOB137k0 - INFO - Retrieved 107 comments so far...
-2025-09-03 23:28:37,190 - youtube_analyzer_OzHvOB137k0 - INFO - Processed 907 AI-ready comments so far...
-2025-09-03 23:28:37,464 - youtube_analyzer_OzHvOB137k0 - INFO - Retrieved 100 comments so far...
-2025-09-03 23:28:37,468 - youtube_analyzer_OzHvOB137k0 - INFO - Processed 1005 AI-ready comments so far...
-2025-09-03 23:28:37,878 - youtube_analyzer_OzHvOB137k0 - INFO - Retrieved 102 comments so far...
-2025-09-03 23:28:37,881 - youtube_analyzer_OzHvOB137k0 - INFO - Processed 1106 AI-ready comments so far...
-2025-09-03 23:28:38,400 - youtube_analyzer_OzHvOB137k0 - INFO - Retrieved 104 comments so far...
-2025-09-03 23:28:38,403 - youtube_analyzer_OzHvOB137k0 - INFO - Processed 1207 AI-ready comments so far...
-2025-09-03 23:28:38,924 - youtube_analyzer_OzHvOB137k0 - INFO - Retrieved 107 comments so far...
-2025-09-03 23:28:38,928 - youtube_analyzer_OzHvOB137k0 - INFO - Processed 1313 AI-ready comments so far...
-2025-09-03 23:28:39,450 - youtube_analyzer_OzHvOB137k0 - INFO - Retrieved 110 comments so far...
-2025-09-03 23:28:39,454 - youtube_analyzer_OzHvOB137k0 - INFO - Processed 1421 AI-ready comments so far...
-2025-09-03 23:28:39,806 - youtube_analyzer_OzHvOB137k0 - INFO - Retrieved 118 comments so far...
-2025-09-03 23:28:39,810 - youtube_analyzer_OzHvOB137k0 - INFO - Processed 1535 AI-ready comments so far...
-2025-09-03 23:28:40,169 - youtube_analyzer_OzHvOB137k0 - INFO - Retrieved 126 comments so far...
-2025-09-03 23:28:40,172 - youtube_analyzer_OzHvOB137k0 - INFO - Processed 1656 AI-ready comments so far...
-2025-09-03 23:28:40,497 - youtube_analyzer_OzHvOB137k0 - INFO - Retrieved 98 comments so far...
-2025-09-03 23:28:40,500 - youtube_analyzer_OzHvOB137k0 - INFO - Processed 1744 AI-ready comments so far...
-2025-09-03 23:28:40,500 - youtube_analyzer_OzHvOB137k0 - INFO - ✅ Successfully processed 1744 comments for AI analysis
-2025-09-03 23:28:40,500 - youtube_analyzer_OzHvOB137k0 - INFO - Extracted and processed 1744 AI-ready comments
-2025-09-03 23:28:40,560 - youtube_analyzer_OzHvOB137k0 - INFO - AI-ready data exported to: data/exports/youtube_analysis_OzHvOB137k0_20250903_232840_ai_ready.json
-2025-09-03 23:28:40,560 - youtube_analyzer_OzHvOB137k0 - INFO - Results exported to: data/exports/youtube_analysis_OzHvOB137k0_20250903_232840_ai_ready.json
-2025-09-03 23:28:40,560 - youtube_analyzer_OzHvOB137k0 - INFO - Analysis completed successfully
+2025-09-06 14:23:13,333 - streamlit_app - INFO - Streamlit app starting up
+2025-09-06 14:23:13,356 - streamlit_app - DEBUG - Initializing Streamlit session state
+2025-09-06 14:23:13,357 - streamlit_app - DEBUG - Initialized analyzer state
+2025-09-06 14:23:13,357 - streamlit_app - DEBUG - Initialized analysis_results state
+2025-09-06 14:23:13,357 - streamlit_app - DEBUG - Initialized video_info state
+2025-09-06 14:23:13,357 - streamlit_app - DEBUG - Initialized search_results state
+2025-09-06 14:23:13,357 - streamlit_app - DEBUG - Initialized collections state
+2025-09-06 14:23:13,357 - streamlit_app - DEBUG - Initialized selected_collection state
+2025-09-06 14:23:13,357 - streamlit_app - DEBUG - Initialized current_tab state
+2025-09-06 14:23:13,357 - streamlit_app - DEBUG - Initialized show_new_video_form state
+2025-09-06 14:23:13,357 - streamlit_app - DEBUG - Initialized chat_messages state
+2025-09-06 14:23:13,357 - streamlit_app - DEBUG - Initialized ai_chain state
+2025-09-06 14:23:13,357 - streamlit_app - DEBUG - Initialized ai_memory state
+2025-09-06 14:23:13,357 - streamlit_app - DEBUG - Initialized ai_llm state
+2025-09-06 14:23:13,357 - streamlit_app - DEBUG - Initialized ai_retriever state
+2025-09-06 14:23:13,357 - streamlit_app - DEBUG - Initialized anthropic_api_key state
+2025-09-06 14:23:13,357 - streamlit_app - DEBUG - Initialized selected_model state
+2025-09-06 14:23:13,357 - streamlit_app - DEBUG - Initialized rag_initialized state
+2025-09-06 14:23:13,357 - streamlit_app - DEBUG - Session state initialization completed
+2025-09-06 14:23:13,357 - streamlit_app - INFO - Session state initialized
+2025-09-06 14:23:13,357 - streamlit_app - INFO - Attempting to initialize analyzer
+2025-09-06 14:23:13,357 - streamlit_app - INFO - Initializing YouTube Analytics System...
+2025-09-06 14:23:20,113 - youtube_analyzer - INFO - YouTube Analyzer initialized
+2025-09-06 14:23:20,137 - streamlit_app - INFO - YouTubeAnalyzer instance created successfully
+2025-09-06 14:23:20,139 - youtube_analyzer - INFO - Attempting to authenticate with YouTube API
+2025-09-06 14:23:20,161 - youtube_analyzer - INFO - Successfully authenticated with YouTube API
+2025-09-06 14:23:20,161 - streamlit_app - INFO - YouTube API authentication successful
+2025-09-06 14:23:20,455 - streamlit_app - INFO - Loaded 1 existing collections
+2025-09-06 14:23:20,471 - streamlit_app - DEBUG - Streamlit app interface fully loaded
+2025-09-06 14:23:24,631 - streamlit_app - INFO - Streamlit app starting up
+2025-09-06 14:23:24,634 - streamlit_app - DEBUG - Initializing Streamlit session state
+2025-09-06 14:23:24,634 - streamlit_app - DEBUG - Session state initialization completed
+2025-09-06 14:23:24,634 - streamlit_app - INFO - Session state initialized
+2025-09-06 14:23:24,635 - streamlit_app - DEBUG - Analyzer already initialized
+2025-09-06 14:23:24,637 - streamlit_app - INFO - User selected collection: POxn009rbqA (320 comments)
+2025-09-06 14:23:24,638 - streamlit_app - INFO - Loading collection for video: POxn009rbqA
+2025-09-06 14:23:24,638 - streamlit_app - DEBUG - Collection details: {'name': 'comments_POxn009rbqA', 'video_id': 'POxn009rbqA', 'created_at': '2025-09-06T13:45:00', 'total_comments': 320}
+2025-09-06 14:23:24,714 - youtube_analyzer - INFO - Successfully loaded analysis for POxn009rbqA from database: 320 comments
+2025-09-06 14:23:24,714 - streamlit_app - INFO - Successfully loaded analysis results for POxn009rbqA
+2025-09-06 14:23:24,714 - streamlit_app - DEBUG - Analysis results keys: ['video_id', 'analysis_timestamp', 'total_comments_analyzed', 'ai_ready_data', 'processed_comments', 'vector_storage']
+2025-09-06 14:23:24,717 - streamlit_app - DEBUG - Streamlit app interface fully loaded
+2025-09-06 14:23:29,831 - streamlit_app - INFO - Streamlit app starting up
+2025-09-06 14:23:29,835 - streamlit_app - DEBUG - Initializing Streamlit session state
+2025-09-06 14:23:29,836 - streamlit_app - DEBUG - Session state initialization completed
+2025-09-06 14:23:29,837 - streamlit_app - INFO - Session state initialized
+2025-09-06 14:23:29,838 - streamlit_app - DEBUG - Analyzer already initialized
+2025-09-06 14:23:29,846 - streamlit_app - DEBUG - Streamlit app interface fully loaded
+2025-09-06 14:23:32,035 - streamlit_app - INFO - Streamlit app starting up
+2025-09-06 14:23:32,037 - streamlit_app - DEBUG - Initializing Streamlit session state
+2025-09-06 14:23:32,037 - streamlit_app - DEBUG - Session state initialization completed
+2025-09-06 14:23:32,037 - streamlit_app - INFO - Session state initialized
+2025-09-06 14:23:32,037 - streamlit_app - DEBUG - Analyzer already initialized
+2025-09-06 14:23:32,049 - streamlit_app - INFO - User initiated AI system initialization with model: claude-3-7-sonnet-20250219
+2025-09-06 14:23:32,050 - streamlit_app - INFO - Starting RAG system initialization with model: claude-3-7-sonnet-20250219
+2025-09-06 14:23:32,050 - streamlit_app - DEBUG - API key provided: Yes
+2025-09-06 14:23:32,050 - streamlit_app - DEBUG - Anthropic API key set in environment variables
+2025-09-06 14:23:32,050 - streamlit_app - INFO - Initializing HuggingFace embeddings with sentence-transformers/paraphrase-multilingual-mpnet-base-v2
+2025-09-06 14:23:32,050 - streamlit_app - INFO - ⚠️  CRITICAL: Using same embedding model as ChromaDB storage to ensure compatibility
+2025-09-06 14:23:39,161 - streamlit_app - INFO - Embeddings model loaded successfully
+2025-09-06 14:23:39,233 - streamlit_app - INFO - Successfully got ChromaDB connection: comments_POxn009rbqA
+2025-09-06 14:23:39,263 - streamlit_app - INFO - Using existing vector store with 320 embedded documents
+2025-09-06 14:23:39,263 - streamlit_app - INFO - Vector store setup completed for video: POxn009rbqA
+2025-09-06 14:23:39,263 - streamlit_app - INFO - Testing vector store retriever...
+2025-09-06 14:23:39,850 - streamlit_app - INFO - ✅ Retriever test successful: 3 documents retrieved
+2025-09-06 14:23:39,850 - streamlit_app - INFO - Sample doc 1: Comment by @Abdul_Rafiq on 2025-07-11 (low engagement, 0 likes  (question, with emojis, detailed com...
+2025-09-06 14:23:39,850 - streamlit_app - DEBUG - Sample doc 1 metadata: {'is_caps': False, 'has_hashtags': False, 'replies_count': 0, 'word_count': 29, 'month': 7, 'weekday': 4, 'is_question': True, 'day': 11, 'cleaned_text': 'Onga life history sonniga but nega paduchathu engineering epti ithula financial learn panniga ooru edathula kuda solla la why? ...nerra company la work panni irikiga like software..but financial epti eduthiga please update 😊', 'likes': 0, 'original_text': 'Onga life history sonniga but nega paduchathu engineering epti ithula financial learn panniga ooru edathula kuda solla la why? ...nerra company la work panni irikiga like software..but financial epti eduthiga please update 😊', 'hour': 13, 'timestamp': '2025-07-11T13:20:01Z', 'author': '@Abdul_Rafiq', 'is_long_comment': True, 'engagement_score': 0.0, 'has_emojis': True, 'has_mentions': False, 'source': 'comment', 'year': 2025, 'character_count': 224, 'video_id': 'POxn009rbqA'}
+2025-09-06 14:23:39,850 - streamlit_app - INFO - Sample doc 2: Comment by @AbdulMusharaf-07 on 2025-09-06 (low engagement, 0 likes  (question)): 0336 1.10 FORMULA ...
+2025-09-06 14:23:39,850 - streamlit_app - DEBUG - Sample doc 2 metadata: {'day': 6, 'replies_count': 0, 'author': '@AbdulMusharaf-07', 'has_emojis': False, 'character_count': 32, 'weekday': 5, 'cleaned_text': '0336 1.10 FORMULA la ethuku bro?', 'is_caps': False, 'has_mentions': False, 'is_question': True, 'original_text': '03:36 1.10 FORMULA la ethuku bro?', 'is_long_comment': False, 'timestamp': '2025-09-06T03:15:31Z', 'hour': 3, 'source': 'comment', 'word_count': 5, 'engagement_score': 0.0, 'month': 9, 'video_id': 'POxn009rbqA', 'has_hashtags': False, 'year': 2025, 'likes': 0}
+2025-09-06 14:23:39,850 - streamlit_app - INFO - Initializing Claude model: claude-3-7-sonnet-20250219
+2025-09-06 14:23:39,851 - streamlit_app - INFO - Claude model initialized successfully
+2025-09-06 14:23:39,851 - streamlit_app - INFO - Creating conversational retrieval chain
+2025-09-06 14:23:39,851 - streamlit_app - INFO - Conversational retrieval chain created successfully
+2025-09-06 14:23:39,854 - streamlit_app - INFO - RAG system initialization completed successfully
+2025-09-06 14:23:39,855 - streamlit_app - DEBUG - Session state updated - rag_initialized: True
+2025-09-06 14:23:39,855 - streamlit_app - INFO - AI system initialization successful - reloading interface
+2025-09-06 14:23:40,078 - streamlit_app - INFO - Streamlit app starting up
+2025-09-06 14:23:40,078 - streamlit_app - DEBUG - Initializing Streamlit session state
+2025-09-06 14:23:40,078 - streamlit_app - DEBUG - Session state initialization completed
+2025-09-06 14:23:40,078 - streamlit_app - INFO - Session state initialized
+2025-09-06 14:23:40,078 - streamlit_app - DEBUG - Analyzer already initialized
+2025-09-06 14:23:40,082 - streamlit_app - DEBUG - Streamlit app interface fully loaded
+2025-09-06 14:24:12,303 - streamlit_app - INFO - Streamlit app starting up
+2025-09-06 14:24:12,306 - streamlit_app - DEBUG - Initializing Streamlit session state
+2025-09-06 14:24:12,307 - streamlit_app - DEBUG - Session state initialization completed
+2025-09-06 14:24:12,307 - streamlit_app - INFO - Session state initialized
+2025-09-06 14:24:12,307 - streamlit_app - DEBUG - Analyzer already initialized
+2025-09-06 14:24:12,332 - streamlit_app - INFO - User asked manual question: who is the top author, just the author name
+2025-09-06 14:24:12,334 - streamlit_app - DEBUG - Added user message to chat history (total messages: 1)
+2025-09-06 14:24:12,335 - streamlit_app - INFO - Received user query: who is the top author, just the author name
+2025-09-06 14:24:12,335 - streamlit_app - DEBUG - Current video context: POxn009rbqA
+2025-09-06 14:24:12,337 - streamlit_app - INFO - Using conversational retrieval chain for response
+2025-09-06 14:24:15,840 - streamlit_app - INFO - Chain response received (length: 397 chars)
+2025-09-06 14:24:15,840 - streamlit_app - DEBUG - Full chain response: Based on the comment data provided, there isn't a clear "top author" in terms of engagement metrics, as all comments have 0 likes and are marked as "low engagement." 
+
+The commenters mentioned in the data are:
+- @KalilM-r2g
+- @AlexChristopher-z6k
+- @jegantkd6609
+- @RamInvestmentjourney
+- @riyazrahmanphotos
+
+None of these stands out as a "top author" based on the metrics provided in the context.
+2025-09-06 14:24:15,841 - streamlit_app - INFO - AI response added to chat (response length: 397 chars)
+2025-09-06 14:24:16,068 - streamlit_app - INFO - Streamlit app starting up
+2025-09-06 14:24:16,069 - streamlit_app - DEBUG - Initializing Streamlit session state
+2025-09-06 14:24:16,069 - streamlit_app - DEBUG - Session state initialization completed
+2025-09-06 14:24:16,069 - streamlit_app - INFO - Session state initialized
+2025-09-06 14:24:16,069 - streamlit_app - DEBUG - Analyzer already initialized
+2025-09-06 14:24:16,072 - streamlit_app - DEBUG - Streamlit app interface fully loaded
+2025-09-06 14:24:48,278 - streamlit_app - INFO - Streamlit app starting up
+2025-09-06 14:24:48,282 - streamlit_app - DEBUG - Initializing Streamlit session state
+2025-09-06 14:24:48,282 - streamlit_app - DEBUG - Session state initialization completed
+2025-09-06 14:24:48,282 - streamlit_app - INFO - Session state initialized
+2025-09-06 14:24:48,283 - streamlit_app - DEBUG - Analyzer already initialized
+2025-09-06 14:24:48,314 - streamlit_app - INFO - User asked manual question: comment with time
+2025-09-06 14:24:48,315 - streamlit_app - DEBUG - Added user message to chat history (total messages: 3)
+2025-09-06 14:24:48,316 - streamlit_app - INFO - Received user query: comment with time
+2025-09-06 14:24:48,316 - streamlit_app - DEBUG - Current video context: POxn009rbqA
+2025-09-06 14:24:48,318 - streamlit_app - INFO - Using conversational retrieval chain for response
+2025-09-06 14:24:54,009 - streamlit_app - INFO - Chain response received (length: 501 chars)
+2025-09-06 14:24:54,010 - streamlit_app - DEBUG - Full chain response: Based on the comment data provided, the most recent comment appears to be from:
+
+@jegantkd6609 posted on 2025-09-05
+
+The chronological order of all comments is:
+- @hariprasanth5773 on 2025-07-03
+- @rajasekarpersonal on 2025-07-03 (posted twice on the same day)
+- @suganyanatarajan5736 on 2025-07-05
+- @jegantkd6609 on 2025-09-05 (most recent)
+
+It's worth noting that all these dates appear to be in the future from our current perspective, which may indicate a data formatting issue in the timestamps.
+2025-09-06 14:24:54,017 - streamlit_app - INFO - AI response added to chat (response length: 501 chars)
+2025-09-06 14:24:54,272 - streamlit_app - INFO - Streamlit app starting up
+2025-09-06 14:24:54,273 - streamlit_app - DEBUG - Initializing Streamlit session state
+2025-09-06 14:24:54,273 - streamlit_app - DEBUG - Session state initialization completed
+2025-09-06 14:24:54,273 - streamlit_app - INFO - Session state initialized
+2025-09-06 14:24:54,273 - streamlit_app - DEBUG - Analyzer already initialized
+2025-09-06 14:24:54,278 - streamlit_app - DEBUG - Streamlit app interface fully loaded
+2025-09-06 14:25:27,597 - streamlit_app - INFO - Streamlit app starting up
+2025-09-06 14:25:27,604 - streamlit_app - DEBUG - Initializing Streamlit session state
+2025-09-06 14:25:27,605 - streamlit_app - DEBUG - Session state initialization completed
+2025-09-06 14:25:27,605 - streamlit_app - INFO - Session state initialized
+2025-09-06 14:25:27,606 - streamlit_app - DEBUG - Analyzer already initialized
+2025-09-06 14:25:27,629 - streamlit_app - INFO - User asked manual question: New topics suggestion
+2025-09-06 14:25:27,629 - streamlit_app - DEBUG - Added user message to chat history (total messages: 5)
+2025-09-06 14:25:27,630 - streamlit_app - INFO - Received user query: New topics suggestion
+2025-09-06 14:25:27,630 - streamlit_app - DEBUG - Current video context: POxn009rbqA
+2025-09-06 14:25:27,631 - streamlit_app - INFO - Using conversational retrieval chain for response
+2025-09-06 14:25:35,889 - streamlit_app - INFO - Chain response received (length: 1420 chars)
+2025-09-06 14:25:35,890 - streamlit_app - DEBUG - Full chain response: Based on the comments provided, I can suggest some potential new topics that might resonate with your audience:
+
+1. **Compounding in investments** - Several comments mention appreciation for your insights, with one specifically mentioning "the sip of compounding," suggesting your audience is interested in investment growth strategies.
+
+2. **Personal development journey** - Comments like "Need to learn many things from you bro, especially positivity" indicate viewers appreciate your personal development content and mindset advice.
+
+3. **Time management and efficiency** - Based on the comment about "taking a lot of time to learn and do things in life," your audience might benefit from content about optimizing learning processes and productivity.
+
+4. **Beginner-friendly investment guides** - Comments suggesting viewers want to "be like you one day" indicate you have viewers who look up to your expertise and want to follow a similar path.
+
+5. **Mindset and positivity** - This was explicitly mentioned as something viewers want to learn from you.
+
+It's worth noting that these suggestions are limited by the small sample of comments provided. For more comprehensive topic recommendations, I would need access to more extensive comment data, video performance metrics, and audience demographics. A broader analysis of your channel analytics would help identify content gaps and viewer interests more accurately.
+2025-09-06 14:25:35,891 - streamlit_app - INFO - AI response added to chat (response length: 1420 chars)
+2025-09-06 14:25:36,123 - streamlit_app - INFO - Streamlit app starting up
+2025-09-06 14:25:36,123 - streamlit_app - DEBUG - Initializing Streamlit session state
+2025-09-06 14:25:36,123 - streamlit_app - DEBUG - Session state initialization completed
+2025-09-06 14:25:36,123 - streamlit_app - INFO - Session state initialized
+2025-09-06 14:25:36,123 - streamlit_app - DEBUG - Analyzer already initialized
+2025-09-06 14:25:36,127 - streamlit_app - DEBUG - Streamlit app interface fully loaded
+2025-09-06 14:28:08,624 - streamlit_app - INFO - Streamlit app starting up
+2025-09-06 14:28:08,635 - streamlit_app - DEBUG - Initializing Streamlit session state
+2025-09-06 14:28:08,636 - streamlit_app - DEBUG - Session state initialization completed
+2025-09-06 14:28:08,636 - streamlit_app - INFO - Session state initialized
+2025-09-06 14:28:08,637 - streamlit_app - DEBUG - Analyzer already initialized
+2025-09-06 14:28:08,667 - streamlit_app - INFO - User cleared chat history (6 messages)
+2025-09-06 14:28:08,668 - streamlit_app - DEBUG - AI memory cleared
+2025-09-06 14:28:08,931 - streamlit_app - INFO - Streamlit app starting up
+2025-09-06 14:28:08,932 - streamlit_app - DEBUG - Initializing Streamlit session state
+2025-09-06 14:28:08,932 - streamlit_app - DEBUG - Session state initialization completed
+2025-09-06 14:28:08,932 - streamlit_app - INFO - Session state initialized
+2025-09-06 14:28:08,932 - streamlit_app - DEBUG - Analyzer already initialized
+2025-09-06 14:28:08,936 - streamlit_app - DEBUG - Streamlit app interface fully loaded

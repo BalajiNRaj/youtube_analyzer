@@ -9,9 +9,8 @@ from datetime import datetime
 from typing import List, Dict, Any, Optional
 from src.youtube_api.client import YouTubeClient
 from src.youtube_api.comments import CommentsExtractor
-from src.analytics.sentiment import SentimentAnalyzer
-from src.analytics.insights import InsightGenerator
 from src.ai_processing import CommentProcessor, ProcessedComment
+from src.vector_db.chroma_client import ChromaVectorDB
 from src.utils.helpers import (
     VideoIDExtractor, DataExporter, Logger, RateLimiter, 
     ConfigManager, format_number
@@ -21,7 +20,7 @@ from src.utils.helpers import (
 class YouTubeAnalyzer:
     """Main YouTube Analytics application."""
     
-    def __init__(self, config_path: str = 'config/config.yaml', video_url: str = None):
+    def __init__(self, config_path: str = 'config/config.yaml'):
         """
         Initialize YouTube Analyzer.
         
@@ -35,8 +34,7 @@ class YouTubeAnalyzer:
             print(f"Warning: Config file not found at {config_path}, using defaults")
             self.config = self._get_default_config()
         
-        video_id = VideoIDExtractor.extract_video_id(video_url)
-        logger_file = 'youtube_analyzer_' + video_id
+        logger_file = 'youtube_analyzer'
         # Set up logging
         self.logger = Logger.setup_logger(
             logger_file, 
@@ -47,11 +45,12 @@ class YouTubeAnalyzer:
         # Initialize components
         self.client = YouTubeClient(config_path)
         self.comments_extractor = None
-        self.sentiment_analyzer = SentimentAnalyzer()
-        self.insights_generator = InsightGenerator()
         
         # AI comment processor
         self.comment_processor = CommentProcessor()
+        
+        # Vector database
+        self.vector_db = ChromaVectorDB()
         
         # Rate limiter
         rate_limit_config = self.config.get('api', {}).get('rate_limit', {})
@@ -86,7 +85,9 @@ class YouTubeAnalyzer:
         self, 
         video_url: str, 
         max_comments: int = 500,
-        export_format: str = 'json'
+        export_format: str = 'json',
+        reset_collection: bool = True,
+        progress_bar: Optional[Any] = None
     ) -> Dict[str, Any]:
         """
         Analyze a YouTube video's comments and generate insights.
@@ -95,6 +96,7 @@ class YouTubeAnalyzer:
             video_url: YouTube video URL or ID
             max_comments: Maximum number of comments to analyze
             export_format: Export format for results
+            reset_collection: Whether to reset existing collection
             
         Returns:
             Dictionary containing analysis results
@@ -106,11 +108,17 @@ class YouTubeAnalyzer:
         
         self.logger.info(f"Starting analysis for video: {video_id}")
         
+        if progress_bar:
+            progress_bar.progress(value=10, text="🔐 Authenticating...")
+
         # Check authentication
         if not self.comments_extractor:
             if not self.authenticate():
                 raise Exception("Authentication failed")
         
+        if progress_bar:
+            progress_bar.progress(value=25, text="📋 Extracting comments...")
+            
         try:
             # Extract comments with rate limiting and AI preprocessing
             self.logger.info(f"Extracting up to {max_comments} comments...")
@@ -118,14 +126,19 @@ class YouTubeAnalyzer:
             
             if not processed_comments:
                 self.logger.warning("No comments found for analysis")
+                if progress_bar:
+                    progress_bar.progress(value=99, text="⚠️ No comments found")
+
                 return {"error": "No comments found"}
             
             self.logger.info(f"Extracted and processed {len(processed_comments)} AI-ready comments")
-            
+            if progress_bar:
+                progress_bar.progress(value=50, text=f"Extracted {len(processed_comments)} comments, and Processing for Storing in Vector DB...")
+
             # Create AI-ready export format
             ai_ready_data = self.comment_processor.create_ai_ready_export(processed_comments)
-            
-            # Prepare results with AI-ready structure
+
+            # Prepare results with AI-ready structure and vector DB info
             results = {
                 'video_id': video_id,
                 'analysis_timestamp': datetime.now().isoformat(),
@@ -133,9 +146,12 @@ class YouTubeAnalyzer:
                 'ai_ready_data': ai_ready_data,
                 'processed_comments': processed_comments  # Keep for backward compatibility
             }
-            
+
             # Export results
             if export_format:
+                if progress_bar:
+                    progress_bar.progress(value=75, text=f"💾 Exporting results to {export_format.upper()}...")
+                
                 filename = f"youtube_analysis_{video_id}_{datetime.now().strftime('%Y%m%d_%H%M%S')}"
                 if export_format.lower() == 'json':
                     # Export AI-ready format
@@ -168,6 +184,19 @@ class YouTubeAnalyzer:
                 self.logger.info(f"Results exported to: {export_path}")
                 results['export_path'] = export_path
             
+            if progress_bar:
+                progress_bar.progress(value=90, text="💾 Storing comments in vector database...")
+
+            # Store in vector database for semantic search
+            self.logger.info("Storing comments in vector database...")
+            vector_storage_summary = self.vector_db.embed_and_store_comments(
+                processed_comments=processed_comments,
+                video_id=video_id,
+                reset_collection=reset_collection
+            )
+
+            results['vector_storage'] = vector_storage_summary
+ 
             self.logger.info("Analysis completed successfully")
             return results
             
@@ -246,11 +275,10 @@ class YouTubeAnalyzer:
     ) -> List[ProcessedComment]:
         """Extract comments with rate limiting and AI preprocessing."""
         processed_comments = []
+        seen_comment_ids = set()  # Additional deduplication at processor level
         batch_size = min(100, max_comments)  # API maximum
         
         try:
-            self.logger.info(f"Extracting and processing comments for AI ingestion...")
-            
             for batch in self.comments_extractor.stream_comments(video_id, batch_size):
                 # Check rate limit
                 if not self.rate_limiter.can_make_request():
@@ -260,21 +288,25 @@ class YouTubeAnalyzer:
                 
                 self.rate_limiter.make_request()
                 
-                self.logger.info(f"Retrieved {len(batch)} comments so far...")
+                self.logger.info(f"Retrieved {len(batch)} comments in this batch...")
+                
                 # Process each comment in the batch for AI
                 for raw_comment in batch:
-                    processed_comment = self.comment_processor.process_comment_data(raw_comment, video_id)
-                    if processed_comment:  # Only add valid processed comments
-                        processed_comments.append(processed_comment)
+                    # Additional deduplication check
+                    if raw_comment['id'] not in seen_comment_ids:
+                        seen_comment_ids.add(raw_comment['id'])
+                        processed_comment = self.comment_processor.process_comment_data(raw_comment, video_id)
+                        if processed_comment:  # Only add valid processed comments
+                            processed_comments.append(processed_comment)
                 
-                self.logger.info(f"Processed {len(processed_comments)} AI-ready comments so far...")
+                self.logger.info(f"Processed {len(processed_comments)} unique AI-ready comments so far...")
                 
                 if len(processed_comments) >= max_comments:
                     break
             
             # Trim to exact requested amount
             final_comments = processed_comments[:max_comments]
-            self.logger.info(f"✅ Successfully processed {len(final_comments)} comments for AI analysis")
+            self.logger.info(f"✅ Successfully processed {len(final_comments)} unique comments for AI analysis")
             
             return final_comments
             
@@ -400,6 +432,192 @@ class YouTubeAnalyzer:
             print(f"💾 AI-ready data saved to: {results['export_path']}")
         
         print("="*60 + "\n")
+    
+    def search_comments(
+        self, 
+        query: str, 
+        video_id: str, 
+        n_results: int = 10
+    ) -> Dict[str, Any]:
+        """
+        Perform semantic search on stored comments.
+        
+        Args:
+            query: Search query in Tamil, English, or mixed (Tanglish)
+            video_id: YouTube video ID
+            n_results: Number of results to return
+            
+        Returns:
+            Search results with similarity scores
+        """
+        self.logger.info(f"Performing semantic search: '{query}' on video {video_id}")
+        
+        results = self.vector_db.semantic_search(
+            query=query,
+            video_id=video_id,
+            n_results=n_results
+        )
+        
+        if "error" in results:
+            self.logger.error(f"Search error: {results['error']}")
+            return results
+        
+        self.logger.info(f"Found {results['total_results']} relevant comments")
+        return results
+    
+    def advanced_search_comments(
+        self,
+        query: str,
+        video_id: str,
+        min_likes: Optional[int] = None,
+        has_replies: Optional[bool] = None,
+        is_question: Optional[bool] = None,
+        n_results: int = 10
+    ) -> Dict[str, Any]:
+        """
+        Advanced semantic search with filters.
+        
+        Args:
+            query: Search query
+            video_id: YouTube video ID
+            min_likes: Minimum likes filter
+            has_replies: Filter comments with/without replies
+            is_question: Filter questions only
+            n_results: Number of results
+            
+        Returns:
+            Filtered search results
+        """
+        self.logger.info(f"Advanced search: '{query}' with filters")
+        
+        results = self.vector_db.advanced_search(
+            query=query,
+            video_id=video_id,
+            min_likes=min_likes,
+            has_replies=has_replies,
+            is_question=is_question,
+            n_results=n_results
+        )
+        
+        if "error" in results:
+            self.logger.error(f"Advanced search error: {results['error']}")
+            return results
+        
+        self.logger.info(f"Found {results['total_results']} filtered results")
+        return results
+    
+    def get_vector_db_stats(self, video_id: str) -> Dict[str, Any]:
+        """Get vector database statistics for a video."""
+        return self.vector_db.get_collection_stats(video_id)
+    
+    def list_stored_videos(self) -> List[Dict[str, Any]]:
+        """List all stored videos in the vector database."""
+        return self.vector_db.list_collections()
+
+    def get_video_analysis(self, video_id: str) -> Dict[str, Any]:
+        """
+        Get existing analysis results for a video from the database.
+        
+        Args:
+            video_id: YouTube video ID
+            
+        Returns:
+            Dictionary containing analysis results or None if not found
+        """
+        try:
+            # Get collection stats to check if video exists in DB
+            stats = self.vector_db.get_collection_stats(video_id)
+            
+            if 'error' in stats:
+                self.logger.info(f"No analysis found for video {video_id} in database")
+                return None
+            
+            # Get processed comments from vector DB
+            processed_comments = self.vector_db.get_all_comments(video_id)
+            
+            if not processed_comments:
+                self.logger.warning(f"No comments found in database for video {video_id}")
+                return None
+            
+            # Convert DB comments to ProcessedComment objects for AI processing
+            processed_comment_objects = []
+            for comment in processed_comments:
+                # Create a minimal ProcessedComment object from DB data
+                from src.ai_processing import ProcessedComment
+                pc = ProcessedComment(
+                    id=comment.get('id', ''),
+                    text=comment.get('text', ''),
+                    cleaned_text=comment.get('cleaned_text', ''),
+                    embedding_ready=comment.get('text', ''),  # Use original text if embedding text not available
+                    author=comment.get('author', ''),
+                    likes=comment.get('likes', 0),
+                    replies_count=comment.get('replies_count', 0),
+                    timestamp=comment.get('timestamp', ''),
+                    video_id=comment.get('video_id', video_id),
+                    metadata={}
+                )
+                processed_comment_objects.append(pc)
+            
+            # Generate AI-ready data from database comments
+            ai_ready_data = self.comment_processor.create_ai_ready_export(processed_comment_objects)
+            
+            # Reconstruct the results structure
+            results = {
+                'video_id': video_id,
+                'analysis_timestamp': stats.get('collection_metadata', {}).get('created_at', ''),
+                'total_comments_analyzed': len(processed_comments),
+                'ai_ready_data': ai_ready_data,
+                'processed_comments': processed_comment_objects,
+                'vector_storage': stats
+            }
+            
+            self.logger.info(f"Successfully loaded analysis for {video_id} from database: {len(processed_comments)} comments")
+            return results
+            
+        except Exception as e:
+            self.logger.error(f"Error loading analysis for {video_id} from database: {str(e)}")
+            return None
+    
+    def get_chroma_client_for_rag(self, video_id: str) -> tuple:
+        """
+        Get ChromaDB client and collection info for RAG system setup.
+        
+        Args:
+            video_id: YouTube video ID
+            
+        Returns:
+            Tuple of (chroma_client, collection_name, db_path) or (None, None, None) if not found
+        """
+        try:
+            # Check if collection exists
+            stats = self.vector_db.get_collection_stats(video_id)
+            
+            if 'error' in stats:
+                return None, None, None
+            
+            chroma_client = self.vector_db.get_chroma_client()
+            collection_name = f"comments_{video_id}"
+            db_path = self.vector_db.db_path
+            
+            return chroma_client, collection_name, db_path
+            
+        except Exception as e:
+            self.logger.error(f"Error getting ChromaDB client for RAG: {str(e)}")
+            return None, None, None
+
+    def reset_collection(self, video_id: str):
+        """
+        Reset/clear the vector database collection for a specific video.
+        
+        Args:
+            video_id: YouTube video ID
+        """
+        try:
+            self.vector_db.reset_collection(video_id)
+            self.logger.info(f"Reset collection for video: {video_id}")
+        except Exception as e:
+            self.logger.error(f"Error resetting collection for {video_id}: {str(e)}")
+            raise
 
 
 def main():
@@ -419,7 +637,7 @@ def main():
     
     try:
         # Initialize analyzer
-        analyzer = YouTubeAnalyzer(args.config, args.video_url)
+        analyzer = YouTubeAnalyzer(args.config)
         
         # Analyze video
         print(f"🚀 Starting analysis of: {args.video_url}")

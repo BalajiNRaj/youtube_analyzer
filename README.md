@@ -10,6 +10,10 @@ A comprehensive Python application to extract YouTube comments and generate deta
 - **Multiple Export Formats**: Export data as JSON or CSV
 - **Batch Processing**: Analyze multiple videos simultaneously
 - **Real-time Processing**: Stream comments for large datasets
+- **📊 Streamlit Dashboard**: Interactive web interface with advanced analytics
+- **🤖 AI Query Engine**: RAG-based chat system powered by Claude AI
+- **🔍 Vector Search**: ChromaDB-powered semantic search through comments
+- **📈 Advanced Visualizations**: Creator-focused analytics with Plotly charts
 
 ## Quick Start
 
@@ -39,12 +43,31 @@ export YOUTUBE_API_KEY="your_api_key_here"
 
 ### 3. Run Analysis
 
+**Command Line Interface:**
 ```bash
 # Analyze a single video
 python main.py "https://www.youtube.com/watch?v=dQw4w9WgXcQ" --max-comments 500
 
 # Run demo without API credentials
 python demo.py
+```
+
+**Streamlit Web Interface:**
+```bash
+# Launch interactive dashboard
+streamlit run streamlit_app.py
+
+# With auto-reload on changes
+streamlit run streamlit_app.py --server.runOnSave true
+```
+
+**AI Query Engine Setup:**
+```bash
+# Install AI dependencies (optional)
+pip install langchain langchain-anthropic langchain-community langchain-chroma huggingface-hub
+
+# Get Anthropic API key from console.anthropic.com
+# Use in the AI Query Engine tab of the Streamlit interface
 ```
 
 ## Usage Examples
@@ -92,6 +115,51 @@ The tool provides comprehensive analytics including:
 - **🔥 Trending Topics**: Popular keywords and emerging themes
 - **💡 Recommendations**: Actionable insights based on analysis patterns
 
+## Streamlit Dashboard Features
+
+### 📊 Video Analysis Tab
+- **Performance KPIs**: Views, engagement rates, subscriber conversion
+- **Comment Health Score**: Quality metrics for community management
+- **Engagement Deep Dive**: Interactive charts and trends
+- **Creator Insights**: Actionable recommendations for content creators
+
+### 🔍 Comment Search Tab  
+- **AI-Powered Search**: Semantic search through comment content
+- **Smart Filters**: Filter by sentiment, engagement, time periods
+- **Quick Presets**: Pre-configured searches for common use cases
+- **Export Results**: Download filtered comment datasets
+
+### 📈 Analytics Dashboard Tab
+- **Sentiment Analysis**: Deep sentiment insights with temporal trends
+- **Engagement Metrics**: Comment performance and user behavior
+- **Content Themes**: Topic modeling and keyword analysis  
+- **Temporal Insights**: Time-based patterns and peak activity periods
+
+### 💬 Comment Explorer Tab
+- **Advanced Filtering**: Multi-dimensional comment exploration
+- **Engagement Tiers**: Comments categorized by significance levels
+- **Author Insights**: Commenter profiles and behavior patterns
+- **Interactive Sorting**: Sort by various metrics and criteria
+
+### 🤖 AI Query Engine Tab
+- **RAG-Based Chat**: Ask questions about your comment data
+- **Claude AI Integration**: Powered by Anthropic's Claude models
+- **Contextual Responses**: AI understands your specific video data
+- **Quick Questions**: Pre-built queries for common insights
+- **Conversational Memory**: Multi-turn conversations with context retention
+
+#### Setting Up AI Features
+1. **Get API Key**: Sign up at [console.anthropic.com](https://console.anthropic.com)
+2. **Choose Model**: Select from Claude 3 variants (Haiku, Sonnet, Opus)
+3. **Initialize System**: Load your comment data into the RAG system
+4. **Start Chatting**: Ask natural language questions about your data
+
+Example AI queries:
+- "What are viewers saying about the video quality?"
+- "Are there any suggestions for improvement?"
+- "What topics generate the most engagement?"
+- "How is the sentiment trending over time?"
+
 ## Project Structure
 
 ```
@@ -103,14 +171,20 @@ youtube-analyzer/
 │   ├── analytics/            # Analysis modules
 │   │   ├── sentiment.py      # Sentiment analysis
 │   │   └── insights.py       # Insights generation
+│   ├── vector_db/           # Vector database integration
+│   │   └── chroma_client.py # ChromaDB client for semantic search
 │   └── utils/               # Utility functions
 │       └── helpers.py       # Helper functions and utilities
 ├── config/                  # Configuration files
 │   ├── config.yaml         # Main configuration
 │   └── credentials.json.template
-├── data/exports/           # Exported analysis results
+├── data/
+│   ├── exports/            # Exported analysis results
+│   └── chroma_db/          # ChromaDB vector database storage
 ├── tests/                  # Unit tests
-├── main.py                # Main application entry point
+├── main.py                # Command line entry point
+├── streamlit_app.py       # Streamlit web dashboard
+├── api_server.py          # FastAPI REST server
 ├── demo.py                # Demo script (no API required)
 └── requirements.txt       # Python dependencies
 ```
@@ -225,9 +299,19 @@ The project is structured for easy extension:
 
 ## Requirements
 
+### Core Requirements
 - Python 3.8+
 - YouTube Data API v3 access
 - Internet connection for API requests
+
+### Optional AI Features
+- Anthropic Claude API key (for AI Query Engine)
+- Additional dependencies: `langchain`, `langchain-anthropic`, `langchain-community`
+
+### Interface Options
+- **Command Line**: Basic Python installation
+- **Streamlit Dashboard**: Web browser for interactive interface
+- **API Server**: FastAPI for REST API integration
 
 ## License
 

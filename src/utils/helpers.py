@@ -206,8 +206,11 @@ class Logger:
         logger = logging.getLogger(name)
         logger.setLevel(getattr(logging, level.upper()))
         
-        # Remove existing handlers
-        for handler in logger.handlers:
+        # Prevent duplicate messages from propagating to parent loggers
+        logger.propagate = False
+        
+        # Remove existing handlers to prevent duplicates
+        for handler in logger.handlers[:]:  # Use slice copy to avoid modification during iteration
             logger.removeHandler(handler)
         
         # File handler
